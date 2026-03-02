@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Skytown MC | Parts Compatibility</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    padding: 15px;
+
+/* Background image from GitHub with 70% dark overlay */
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url('https://raw.githubusercontent.com/KymcoSkytown/KymcoSkytownCompatiblepart/8fcba7f2979878cb5f45fe69be1a0c8c6d09208f/Your%20paragraph%20text%20(5).png');
+
+    background-size: cover;
+    background-position: center 60%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* =========================
+   MAIN CONTAINER (FINAL)
+========================= */
+.container {
+    max-width: 700px;
+    margin: auto;
+    background: rgba(255, 255, 255, 0.78); /* light glass */
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+}
+
+/* =========================
+   HEADER
+========================= */
+.header {
+    background: #E2852E;
+    color: #222222;
+    padding: 22px;
+    text-align: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+/* =========================
+   CONTENT
+========================= */
+.content {
+    padding: 22px;
+}
+
+label {
+    font-weight: 600;
+    margin-top: 12px;
+    display: block;
+    color: #222;
+}
+
+/* =========================
+   FORM ELEMENTS
+========================= */
+select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    background: #ffffff;
+}
+
+select:disabled {
+    background: #eaeaea;
+    color: #777;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+button {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:active {
+    transform: scale(0.96);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+button {
+    margin-top: 16px;
+    padding: 11px 22px;
+    background-color: #111;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #333;
+}
+
+/* =========================
+   PARTS GRID
+========================= */
+.parts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+    margin-top: 22px;
+}
+
+.part-card {
+    background: #F6CE71;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    border: 1px solid #d6b85a;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.part-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: #333;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    padding-bottom: 6px;
+    width: 100%;
+    text-align: center;
+}
+
+/* =========================
+   NOTE
+========================= */
+.note {
+    font-size: 12px;
+    color: #444;
+    margin: 18px;
+    text-align: center;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Skytown MC<br>Parts Compatibility Checker</h1>
+    </div>
+
+    <div class="content">
+        <label>Select Motor Model</label>
+        <select id="motorSelect">
+            <option value="">-- Select Motor --</option>
+        </select>
+
+        <label>Select Part</label>
+        <select id="partSelect" disabled>
+            <option value="">-- Select Part --</option>
+        </select>
+
+        <button id="refreshBtn">Refresh</button>
+
+        <div class="parts-grid" id="partsList"></div>
+    </div>
+
+    <div class="note">
+        ⚠ Compatibility is for reference only. Actual fitment may vary.
+    </div>
+</div>
+
+<script>
+const data = {
+    "KYMCO Skytown": {
+        "Spark plug": [
+            { name: "LR7D" }
+        ],
+        "Air filter": [
+            { name: "Kymco Stock Air Filter" }
+        ],
+        "Fuel injector": [],
+        "Drive belt (CVT)": [
+            { name: "Bando CVT Belt 842 20 30" }
+        ],
+        "Center Spring": [
+            { name: "Click V1" }
+        ],
+        "Clutch Spring": [
+            { name: "Aerox" }
+        ],
+        "Clutch lining": [
+            { name: "Stock Clutch Lining" }
+        ],
+        "Clutch Bell": [
+            { name: "Stock Clutch Bell" }
+        ],
+
+        "Battery": [],
+        "Headlight": [],
+        "Taillight": [],
+        "Turn signal lights": [],
+        "Wiring harness (main)": [],
+        "Ignition switch & key": [],
+
+        "Front tire": [],
+        "Rear tire": [],
+        "Front wheel": [],
+        "Rear wheel": [],
+        "Wheel bearings": [],
+
+        "Front brake pads / shoes": [],
+        "Rear brake pads / shoes": [
+            { name: "Kymco Like 150i" },
+            { name: "Rouser 200" }
+        ],
+        "Brake lever (front)": [
+            { name: "Suzuki Thunder 125" }
+        ],
+        "Brake pedal (rear)": [],
+        "Brake Switch": [],
+
+        "Front fork": [],
+        "Rear shock absorber": [],
+        "Frame (main body)": [],
+        "Seat": [],
+
+        "Handlebar": [],
+        "Throttle grip": [],
+        "Brake levers": [
+            { name: "RCB NMAX V1" }
+        ],
+
+        "Engine oil": [
+            { name: "Shell Long Ride" },
+            { name: "Shell City Scooter" },
+            { name: "Liqui Moly Molygen" },
+            { name: "Petron" },
+            { name: "Motul" }
+        ],
+        "Brake fluid": []
+    }
+};
+
+
+
+const motorSelect = document.getElementById("motorSelect");
+const partSelect = document.getElementById("partSelect");
+const partsList = document.getElementById("partsList");
+const refreshBtn = document.getElementById("refreshBtn");
+
+// Load motor list
+Object.keys(data).forEach(motor => {
+    const option = document.createElement("option");
+    option.value = motor;
+    option.textContent = motor;
+    motorSelect.appendChild(option);
+});
+
+// Motor change
+motorSelect.addEventListener("change", () => {
+    partSelect.innerHTML = '<option value="">-- Select Part --</option>';
+    partsList.innerHTML = "";
+    partSelect.disabled = true;
+
+    const motor = motorSelect.value;
+    if (!motor) return;
+
+    Object.keys(data[motor]).forEach(part => {
+        const option = document.createElement("option");
+        option.value = part;
+        option.textContent = part;
+        partSelect.appendChild(option);
+    });
+
+    partSelect.disabled = false;
+});
+
+// Part change
+partSelect.addEventListener("change", () => {
+    partsList.innerHTML = "";
+    const motor = motorSelect.value;
+    const part = partSelect.value;
+    if (!part) return;
+
+    const items = data[motor][part];
+    if (!items || items.length === 0) {
+        const msg = document.createElement("div");
+        msg.className = "note";
+        msg.textContent = "⚠ No compatible parts available yet for this selection.";
+        partsList.appendChild(msg);
+        return;
+    }
+
+    items.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "part-card";
+        card.innerHTML = `<div class="part-title">${item.name}</div>`;
+        partsList.appendChild(card);
+    });
+});
+
+// Refresh button
+refreshBtn.addEventListener("click", () => {
+    motorSelect.value = "";
+    partSelect.innerHTML = '<option value="">-- Select Part --</option>';
+    partSelect.disabled = true;
+    partsList.innerHTML = "";
+});
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
